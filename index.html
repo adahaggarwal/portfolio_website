@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 
 <body>
@@ -33,6 +34,9 @@
         </div>
     </nav>
 
+    <!-- 3D Background Canvas -->
+    <canvas id="three-canvas"></canvas>
+    
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
@@ -68,6 +72,7 @@
             <div class="hero-image">
             <div class="image-placeholder">
             <img src="adah.png" alt="Adah Aggarwal">
+            <div class="image-3d-effect"></div>
             </div>
             </div>
         </div>
@@ -257,6 +262,7 @@
                     <div class="project-image">
                         <!-- <i class="fas fa-heart"></i> -->
                         <img src="inner glow.png" , width="200" ,height="200">
+                        <div class="project-3d-overlay"></div>
                     </div>
                     <div class="project-content">
                         <h3>Inner Glow</h3>
@@ -281,6 +287,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <img src="ss.png" , width="200" ,height="200">
+                        <div class="project-3d-overlay"></div>
                     </div>
                     <div class="project-content">
                         <h3>SyncSavr</h3>
@@ -307,7 +314,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <img src="rd.png" , width="200" ,height="200">
-
+                        <div class="project-3d-overlay"></div>
                     </div>
                     <div class="project-content">
                         <h3>Repairs Duniya</h3>
@@ -330,7 +337,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <img src="th.png" , width="200" ,height="200">
-
+                        <div class="project-3d-overlay"></div>
                     </div>
                     <div class="project-content">
                         <h3>Thrive</h3>
@@ -354,7 +361,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <img src="pingpong.png" , width="200" ,height="200">
-
+                        <div class="project-3d-overlay"></div>
                     </div>
                     <div class="project-content">
                         <h3>Ping Pong Game</h3>
@@ -376,7 +383,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <img src="ww.png" , width="200" ,height="200">
-
+                        <div class="project-3d-overlay"></div>
                     </div>
                     <div class="project-content">
                         <h3>WeeWear</h3>
@@ -397,7 +404,7 @@
                 <div class="project-card">
                     <div class="project-image">
                         <img src="cu.png" , width="200" ,height="200">
-
+                        <div class="project-3d-overlay"></div>
                     </div>
                     <div class="project-content">
                         <h3>CU Insight</h3>
@@ -648,6 +655,7 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="three-animations.js"></script>
 </body>
 
 </html>
