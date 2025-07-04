@@ -65,7 +65,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Intersection Observer for animations
+// Simple visibility observer (simplified)
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -74,41 +74,21 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.classList.add('animate');
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
         }
     });
 }, observerOptions);
 
-// Observe elements for animation
+// Observe elements for simple visibility
 document.querySelectorAll('.project-card, .achievement-card, .skill-category, .timeline-item').forEach(el => {
+    el.style.opacity = '0.8';
+    el.style.transform = 'translateY(10px)';
+    el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
     observer.observe(el);
 });
 
-// Typing effect for hero title
-function typeWriter(element, text, speed = 100) {
-    let i = 0;
-    element.innerHTML = '';
-    
-    function typing() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(typing, speed);
-        }
-    }
-    typing();
-}
-
-// Initialize typing effect when page loads
-window.addEventListener('load', () => {
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const originalText = heroTitle.textContent;
-        setTimeout(() => {
-            typeWriter(heroTitle, originalText, 80);
-        }, 1000);
-    }
-});
+// Removed typing effect for better performance
 
 // Contact form handling
 const contactForm = document.getElementById('contact-form');
@@ -193,67 +173,8 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// Add CSS for additional animations
+// Simplified styles
 const additionalStyles = `
-    .animate {
-        animation: slideInUp 0.6s ease forwards;
-    }
-    
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .project-card {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.6s ease;
-    }
-    
-    .project-card.animate {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    .achievement-card {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.6s ease;
-    }
-    
-    .achievement-card.animate {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    .skill-category {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.6s ease;
-    }
-    
-    .skill-category.animate {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    .timeline-item {
-        opacity: 0;
-        transform: translateX(-30px);
-        transition: all 0.6s ease;
-    }
-    
-    .timeline-item.animate {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    
     .nav-link.active {
         color: #00D4AA;
     }
@@ -278,180 +199,53 @@ const additionalStyles = `
     .notification-close:hover {
         opacity: 0.7;
     }
-    
-    @keyframes rippleEffect {
-        to {
-            transform: scale(2);
-            opacity: 0;
-        }
-    }
-    
-    body {
-        transition: opacity 0.5s ease;
-    }
 `;
 
-// Add the additional styles to the page
+// Add the simplified styles to the page
 const styleSheet = document.createElement('style');
 styleSheet.textContent = additionalStyles;
 document.head.appendChild(styleSheet);
 
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const parallax = document.querySelector('.hero');
-    if (parallax) {
-        const speed = scrolled * 0.5;
-        parallax.style.backgroundPosition = `center ${speed}px`;
-    }
-});
+// Removed parallax effect for better performance
 
-// Add hover effects for skill icons
+// Simplified hover effects for skill icons
 document.querySelectorAll('.skill-icon').forEach(icon => {
     icon.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-5px) scale(1.05)';
+        this.style.transform = 'translateY(-2px)';
     });
     
     icon.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
+        this.style.transform = 'translateY(0)';
     });
 });
 
-// Add hover effects for project cards
+// Simplified hover effects for project cards
 document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-10px) scale(1.02)';
+        this.style.transform = 'translateY(-5px)';
     });
     
     card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
+        this.style.transform = 'translateY(0)';
     });
 });
 
-// Add click effects for buttons
+// Simplified button click feedback
 document.querySelectorAll('.btn').forEach(button => {
     button.addEventListener('click', function(e) {
-        // Create ripple effect
-        const ripple = document.createElement('span');
-        const rect = this.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
-        
-        ripple.style.cssText = `
-            position: absolute;
-            width: ${size}px;
-            height: ${size}px;
-            left: ${x}px;
-            top: ${y}px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: rippleEffect 0.6s ease;
-            pointer-events: none;
-        `;
-        
-        this.style.position = 'relative';
-        this.style.overflow = 'hidden';
-        this.appendChild(ripple);
-        
-        setTimeout(() => ripple.remove(), 600);
-    });
-});
-
-// Add counter animation for stats
-function animateCounter(element, target, duration = 2000) {
-    let start = 0;
-    const increment = target / (duration / 16);
-    
-    function updateCounter() {
-        start += increment;
-        if (start < target) {
-            element.textContent = Math.ceil(start);
-            requestAnimationFrame(updateCounter);
-        } else {
-            element.textContent = target;
-        }
-    }
-    
-    updateCounter();
-}
-
-// Observe stats for counter animation
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const stats = entry.target.querySelectorAll('.stat h3');
-            stats.forEach(stat => {
-                const value = stat.textContent;
-                if (value.includes('+')) {
-                    const num = parseInt(value);
-                    stat.textContent = '0+';
-                    animateCounter(stat, num);
-                } else if (value.includes('.')) {
-                    const num = parseFloat(value);
-                    stat.textContent = '0.0';
-                    animateCounter(stat, num);
-                }
-            });
-        }
-    });
-}, observerOptions);
-
-document.querySelectorAll('.about-stats').forEach(el => {
-    statsObserver.observe(el);
-});
-
-// Add loading screen
-function createLoadingScreen() {
-    const loadingScreen = document.createElement('div');
-    loadingScreen.id = 'loading-screen';
-    loadingScreen.innerHTML = `
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <h2>Adah Aggarwal</h2>
-            <p>Loading Portfolio...</p>
-        </div>
-    `;
-    
-    loadingScreen.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #0A0E1A;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        opacity: 1;
-        transition: opacity 0.5s ease;
-    `;
-    
-    const loadingContent = loadingScreen.querySelector('.loading-content');
-    if (loadingContent) {
-        loadingContent.style.cssText = `
-            text-align: center;
-            color: white;
-        `;
-    }
-    
-    document.body.appendChild(loadingScreen);
-    
-    // Remove loading screen when page loads
-    window.addEventListener('load', () => {
+        // Simple scale effect
+        this.style.transform = 'scale(0.98)';
         setTimeout(() => {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.remove();
-            }, 500);
-        }, 1000);
+            this.style.transform = 'scale(1)';
+        }, 150);
     });
-}
+});
 
-// Initialize loading screen
-// createLoadingScreen();
+// Removed counter animations for better performance
+
+// Removed loading screen for better performance
+
+// Loading screen disabled
 
 // Add scroll to top button
 const scrollToTopBtn = document.createElement('button');
@@ -499,15 +293,13 @@ scrollToTopBtn.addEventListener('click', () => {
     });
 });
 
-// Add hover effect to scroll to top button
+// Simplified hover effect for scroll to top button
 scrollToTopBtn.addEventListener('mouseenter', () => {
     scrollToTopBtn.style.background = '#4EECD9';
-    scrollToTopBtn.style.transform = 'scale(1.1)';
 });
 
 scrollToTopBtn.addEventListener('mouseleave', () => {
     scrollToTopBtn.style.background = '#00D4AA';
-    scrollToTopBtn.style.transform = 'scale(1)';
 });
 
 // Preload images function (if you add images later)
@@ -549,66 +341,9 @@ const fadeInCharStyleSheet = document.createElement('style');
 fadeInCharStyleSheet.textContent = fadeInCharStyles;
 document.head.appendChild(fadeInCharStyleSheet);
 
-// Initialize text reveal on page load
-window.addEventListener('load', () => {
-    setTimeout(revealText, 2000);
-});
+// Text reveal disabled
 
-// Add particle effect (simple version)
-function createParticles() {
-    const particlesContainer = document.createElement('div');
-    particlesContainer.className = 'particles';
-    particlesContainer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: -1;
-        overflow: hidden;
-    `;
-    
-    for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.style.cssText = `
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(139, 92, 246, 0.3);
-            border-radius: 50%;
-            animation: float ${Math.random() * 6 + 4}s ease-in-out infinite;
-            animation-delay: ${Math.random() * 5}s;
-            left: ${Math.random() * 100}%;
-            top: ${Math.random() * 100}%;
-        `;
-        
-        particlesContainer.appendChild(particle);
-    }
-    
-    document.body.appendChild(particlesContainer);
-}
-
-// Add floating animation for particles
-const particleStyles = `
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-            opacity: 1;
-        }
-        50% {
-            transform: translateY(-20px) rotate(180deg);
-            opacity: 0.3;
-        }
-    }
-`;
-
-const particleStyleSheet = document.createElement('style');
-particleStyleSheet.textContent = particleStyles;
-document.head.appendChild(particleStyleSheet);
-
-// Initialize particles
-// createParticles();
+// Particle effects disabled for better performance
 
 console.log('Portfolio website loaded successfully!');
 console.log('Created by Adah Aggarwal - Flutter & Mobile App Developer');
