@@ -81,14 +81,96 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Observe elements for simple visibility
-document.querySelectorAll('.project-card, .achievement-card, .skill-category, .timeline-item').forEach(el => {
+document.querySelectorAll('.project-card, .achievement-card, .skill-icon, .timeline-item').forEach(el => {
     el.style.opacity = '0.8';
     el.style.transform = 'translateY(10px)';
     el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
     observer.observe(el);
 });
 
-// Removed typing effect for better performance
+// Skills Carousel Auto-Scroll Functionality
+function initSkillsCarousel() {
+    const skillsSection = document.getElementById('skills');
+    const carousel = document.querySelector('.skills-carousel');
+    
+    if (!carousel || !skillsSection) return;
+
+    let isCarouselInView = false;
+
+    // Duplicate skills for seamless infinite scroll
+    const skillIcons = carousel.querySelectorAll('.skill-icon');
+    const skillsArray = Array.from(skillIcons);
+    
+    // Clone all skills and append them for seamless loop
+    skillsArray.forEach(skill => {
+        const clone = skill.cloneNode(true);
+        carousel.appendChild(clone);
+    });
+
+    // Intersection Observer for auto-scroll when in view
+    const skillsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                isCarouselInView = true;
+                carousel.style.animationPlayState = 'running';
+            } else {
+                isCarouselInView = false;
+                carousel.style.animationPlayState = 'paused';
+            }
+        });
+    }, {
+        threshold: 0.3, // Start when 30% of the section is visible
+        rootMargin: '0px'
+    });
+
+    skillsObserver.observe(skillsSection);
+
+    // Pause animation on hover
+    carousel.addEventListener('mouseenter', () => {
+        carousel.style.animationPlayState = 'paused';
+    });
+
+    // Resume animation when mouse leaves (only if section is in view)
+    carousel.addEventListener('mouseleave', () => {
+        if (isCarouselInView) {
+            carousel.style.animationPlayState = 'running';
+        }
+    });
+
+    // Touch support for mobile - pause on touch
+    let touchStarted = false;
+
+    carousel.addEventListener('touchstart', () => {
+        touchStarted = true;
+        carousel.style.animationPlayState = 'paused';
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', () => {
+        if (touchStarted && isCarouselInView) {
+            // Resume after a short delay
+            setTimeout(() => {
+                if (isCarouselInView) {
+                    carousel.style.animationPlayState = 'running';
+                }
+            }, 2000);
+        }
+        touchStarted = false;
+    }, { passive: true });
+
+    // Handle visibility change (when user switches tabs)
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            carousel.style.animationPlayState = 'paused';
+        } else if (isCarouselInView) {
+            carousel.style.animationPlayState = 'running';
+        }
+    });
+
+    console.log('Skills carousel initialized with continuous auto-scroll');
+}
+
+// Initialize carousel when DOM is loaded
+document.addEventListener('DOMContentLoaded', initSkillsCarousel);
 
 // Contact form handling
 const contactForm = document.getElementById('contact-form');
@@ -206,19 +288,6 @@ const styleSheet = document.createElement('style');
 styleSheet.textContent = additionalStyles;
 document.head.appendChild(styleSheet);
 
-// Removed parallax effect for better performance
-
-// Simplified hover effects for skill icons
-document.querySelectorAll('.skill-icon').forEach(icon => {
-    icon.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-2px)';
-    });
-    
-    icon.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
-    });
-});
-
 // Simplified hover effects for project cards
 document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('mouseenter', function() {
@@ -240,12 +309,6 @@ document.querySelectorAll('.btn').forEach(button => {
         }, 150);
     });
 });
-
-// Removed counter animations for better performance
-
-// Removed loading screen for better performance
-
-// Loading screen disabled
 
 // Add scroll to top button
 const scrollToTopBtn = document.createElement('button');
@@ -347,3 +410,4 @@ document.head.appendChild(fadeInCharStyleSheet);
 
 console.log('Portfolio website loaded successfully!');
 console.log('Created by Adah Aggarwal - Flutter & Mobile App Developer');
+console.log('Skills carousel initialized with auto-scroll functionality');

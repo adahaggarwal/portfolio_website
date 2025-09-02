@@ -613,31 +613,33 @@ section {
     background: var(--bg-dark);
 }
 
-.skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 4fr));
-    gap: 2rem;
-}
-
-.skill-category {
-    background: rgba(0, 212, 170, 0.05);
-    padding: 2rem;
+.skills-carousel-container {
+    position: relative;
+    overflow: hidden;
     border-radius: 15px;
+    background: rgba(0, 212, 170, 0.05);
     border: 1px solid rgba(0, 212, 170, 0.2);
+    padding: 2rem;
 }
 
-.skill-category h3 {
-    color: var(--accent-primary);
-    font-size: 1.3rem;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.skill-icons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+.skills-carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
     gap: 1.5rem;
-    justify-items: center;
+    animation: scroll 20s linear infinite;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.skills-carousel:hover {
+    animation-play-state: paused;
 }
 
 .skill-icon {
@@ -651,6 +653,7 @@ section {
     cursor: pointer;
     min-width: 120px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .skill-icon:hover {
@@ -659,25 +662,11 @@ section {
     box-shadow: 0 8px 15px rgba(0, 212, 170, 0.2);
 }
 
-
-
-.skill-icon i {
-    font-size: 3rem;
-    color: var(--accent-primary);
-    margin-bottom: 0.75rem;
-    transition: all 0.3s ease;
-}
-
 .skill-icon img {
     width: 48px;
     height: 48px;
     margin-bottom: 0.75rem;
     transition: all 0.3s ease;
-}
-
-.skill-icon:hover i {
-    color: var(--accent-secondary);
-    transform: scale(1.1);
 }
 
 .skill-icon:hover img {
@@ -690,6 +679,16 @@ section {
     font-weight: 500;
     font-size: 0.9rem;
     line-height: 1.2;
+}
+
+/* Remove carousel indicators */
+.carousel-indicators {
+    display: none;
+}
+
+/* Remove old skills-grid styles */
+.skills-grid {
+    display: none;
 }
 
 /* Achievements Section */
@@ -953,12 +952,23 @@ section {
         grid-template-columns: 1fr;
     }
 
-    .skills-grid {
-        grid-template-columns: 1fr;
+    .skills-carousel {
+        animation: scroll 15s linear infinite;
+        gap: 1rem;
     }
 
-    .achievements-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    .skill-icon {
+        min-width: 100px;
+        padding: 1rem;
+    }
+
+    .skill-icon img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .skill-icon span {
+        font-size: 0.8rem;
     }
 }
 
@@ -996,6 +1006,29 @@ section {
     .image-placeholder img {
         width: 230px;
         height: 230px;
+    }
+
+    .skills-carousel-container {
+        padding: 1.5rem;
+    }
+
+    .skills-carousel {
+        animation: scroll 12s linear infinite;
+        gap: 0.8rem;
+    }
+
+    .skill-icon {
+        min-width: 80px;
+        padding: 0.8rem;
+    }
+
+    .skill-icon img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .skill-icon span {
+        font-size: 0.75rem;
     }
 }
 
