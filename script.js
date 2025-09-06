@@ -55,17 +55,19 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// Add background to navbar on scroll
+// Add background to navbar on scroll with enhanced effects
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(10, 14, 26, 0.98)';
+        navbar.style.background = 'rgba(248, 250, 252, 0.98)';
+        navbar.classList.add('scrolled');
     } else {
-        navbar.style.background = 'rgba(10, 14, 26, 0.95)';
+        navbar.style.background = 'rgba(248, 250, 252, 0.95)';
+        navbar.classList.remove('scrolled');
     }
 });
 
-// Simple visibility observer (simplified)
+// Enhanced scroll-triggered animations
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -74,18 +76,67 @@ const observerOptions = {
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
         }
     });
 }, observerOptions);
 
+// Enhanced element observation with staggered animations
+document.querySelectorAll('.project-card, .achievement-card, .skill-icon, .experience-card, .section-title').forEach((el, index) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    observer.observe(el);
+});
+
+// Enhanced typing effect for hero subtitle
+function typeWriter(element, text, speed = 100) {
+    let i = 0;
+    element.textContent = '';
+    const timer = setInterval(() => {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+        } else {
+            clearInterval(timer);
+        }
+    }, speed);
+}
+
+// Initialize typing effect
+document.addEventListener('DOMContentLoaded', () => {
+    const subtitle = document.querySelector('.hero-subtitle');
+    if (subtitle) {
+        const originalText = subtitle.textContent;
+        setTimeout(() => {
+            typeWriter(subtitle, originalText, 80);
+        }, 1000);
+    }
+});
+
+// Simple visibility observer (simplified)
+const simpleObserverOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const simpleObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, simpleObserverOptions);
+
 // Observe elements for simple visibility
-document.querySelectorAll('.project-card, .achievement-card, .skill-icon, .timeline-item').forEach(el => {
+document.querySelectorAll('.project-card, .achievement-card, .skill-icon, .experience-card').forEach(el => {
     el.style.opacity = '0.8';
     el.style.transform = 'translateY(10px)';
     el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    observer.observe(el);
+    simpleObserver.observe(el);
 });
 
 // Skills Carousel Auto-Scroll Functionality
@@ -199,57 +250,66 @@ if (contactForm) {
     });
 }
 
-// Notification system
+// Enhanced notification system with better animations
 function showNotification(message, type = 'info') {
     // Remove existing notifications
     const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
+    existingNotifications.forEach(notification => {
+        notification.style.transform = 'translateX(400px) scale(0.8)';
+        setTimeout(() => notification.remove(), 300);
+    });
     
     // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
+            <div class="notification-icon">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            </div>
             <span class="notification-message">${message}</span>
             <button class="notification-close">&times;</button>
         </div>
     `;
     
-    // Add notification styles
+    // Enhanced notification styles
     notification.style.cssText = `
         position: fixed;
         top: 90px;
         right: 20px;
-        background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#00D4AA'};
+        background: ${type === 'success' ? 'linear-gradient(135deg, #10B981, #059669)' : type === 'error' ? 'linear-gradient(135deg, #EF4444, #DC2626)' : 'linear-gradient(135deg, #2563EB, #1D4ED8)'};
         color: white;
         padding: 1rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
+        transform: translateX(400px) scale(0.8);
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         max-width: 400px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     `;
     
     // Add to page
     document.body.appendChild(notification);
     
-    // Animate in
+    // Animate in with spring effect
     setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
+        notification.style.transform = 'translateX(0) scale(1)';
     }, 100);
     
     // Close button functionality
     const closeBtn = notification.querySelector('.notification-close');
     closeBtn.addEventListener('click', () => {
-        notification.style.transform = 'translateX(400px)';
+        notification.style.transform = 'translateX(400px) scale(0.8)';
         setTimeout(() => notification.remove(), 300);
     });
     
-    // Auto remove after 5 seconds
+    // Auto remove with fade out
     setTimeout(() => {
         if (notification.parentNode) {
-            notification.style.transform = 'translateX(400px)';
+            notification.style.transform = 'translateX(400px) scale(0.8)';
+            notification.style.opacity = '0';
             setTimeout(() => notification.remove(), 300);
         }
     }, 5000);
@@ -288,31 +348,88 @@ const styleSheet = document.createElement('style');
 styleSheet.textContent = additionalStyles;
 document.head.appendChild(styleSheet);
 
-// Simplified hover effects for project cards
+// Enhanced hover effects for project cards
 document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-5px)';
+        this.style.transform = 'translateY(-10px) scale(1.02)';
+        this.style.boxShadow = '0 20px 40px rgba(37, 99, 235, 0.15)';
+        
+        // Add subtle rotation to tech tags
+        this.querySelectorAll('.tech-tag').forEach((tag, index) => {
+            setTimeout(() => {
+                tag.style.transform = 'translateY(-3px) rotate(2deg)';
+            }, index * 50);
+        });
     });
     
     card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
+        this.style.transform = 'translateY(0) scale(1)';
+        this.style.boxShadow = '0 4px 6px rgba(37, 99, 235, 0.05)';
+        
+        // Reset tech tags
+        this.querySelectorAll('.tech-tag').forEach(tag => {
+            tag.style.transform = 'translateY(0) rotate(0deg)';
+        });
     });
 });
 
-// Simplified button click feedback
+// Enhanced button interactions
 document.querySelectorAll('.btn').forEach(button => {
-    button.addEventListener('click', function(e) {
-        // Simple scale effect
-        this.style.transform = 'scale(0.98)';
-        setTimeout(() => {
-            this.style.transform = 'scale(1)';
-        }, 150);
+    button.addEventListener('mousedown', function(e) {
+        // Create ripple effect
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s ease-out;
+            pointer-events: none;
+        `;
+        
+        this.appendChild(ripple);
+        
+        setTimeout(() => ripple.remove(), 600);
     });
 });
 
-// Add scroll to top button
+// Add ripple animation CSS
+const rippleStyles = `
+    @keyframes ripple {
+        to {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+    
+    .btn {
+        position: relative;
+        overflow: hidden;
+    }
+`;
+
+const rippleStyleSheet = document.createElement('style');
+rippleStyleSheet.textContent = rippleStyles;
+document.head.appendChild(rippleStyleSheet);
+
+// Enhanced scroll to top button with progress indicator
 const scrollToTopBtn = document.createElement('button');
-scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+scrollToTopBtn.innerHTML = `
+    <svg class="progress-ring" width="50" height="50">
+        <circle class="progress-ring-circle" stroke="rgba(37, 99, 235, 0.2)" stroke-width="2" fill="transparent" r="22" cx="25" cy="25"/>
+        <circle class="progress-ring-progress" stroke="#2563EB" stroke-width="2" fill="transparent" r="22" cx="25" cy="25"/>
+    </svg>
+    <i class="fas fa-arrow-up"></i>
+`;
 scrollToTopBtn.className = 'scroll-to-top';
 scrollToTopBtn.style.cssText = `
     position: fixed;
@@ -320,8 +437,8 @@ scrollToTopBtn.style.cssText = `
     right: 30px;
     width: 50px;
     height: 50px;
-    background: #00D4AA;
-    color: white;
+    background: rgba(255, 255, 255, 0.9);
+    color: #2563EB;
     border: none;
     border-radius: 50%;
     font-size: 1.2rem;
@@ -333,36 +450,73 @@ scrollToTopBtn.style.cssText = `
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    backdrop-filter: blur(10px);
 `;
+
+// Style the progress ring
+const progressRingStyles = `
+    .progress-ring {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: rotate(-90deg);
+    }
+    
+    .progress-ring-circle {
+        transition: stroke-dasharray 0.3s ease;
+    }
+    
+    .progress-ring-progress {
+        transition: stroke-dasharray 0.3s ease;
+        stroke-dasharray: 0 138;
+    }
+    
+    .scroll-to-top i {
+        position: relative;
+        z-index: 1;
+    }
+`;
+
+const progressStyleSheet = document.createElement('style');
+progressStyleSheet.textContent = progressRingStyles;
+document.head.appendChild(progressStyleSheet);
 
 document.body.appendChild(scrollToTopBtn);
 
-// Show/hide scroll to top button
+// Enhanced scroll progress and show/hide button
 window.addEventListener('scroll', () => {
+    const scrollPercent = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    const circumference = 2 * Math.PI * 22;
+    const strokeDasharray = `${(scrollPercent / 100) * circumference} ${circumference}`;
+    
+    const progressCircle = scrollToTopBtn.querySelector('.progress-ring-progress');
+    if (progressCircle) {
+        progressCircle.style.strokeDasharray = strokeDasharray;
+    }
+    
     if (window.pageYOffset > 300) {
         scrollToTopBtn.style.opacity = '1';
         scrollToTopBtn.style.visibility = 'visible';
+        scrollToTopBtn.style.transform = 'scale(1)';
     } else {
         scrollToTopBtn.style.opacity = '0';
         scrollToTopBtn.style.visibility = 'hidden';
+        scrollToTopBtn.style.transform = 'scale(0.8)';
     }
 });
 
-// Scroll to top functionality
-scrollToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
-
-// Simplified hover effect for scroll to top button
+// Enhanced hover effects for scroll to top button
 scrollToTopBtn.addEventListener('mouseenter', () => {
-    scrollToTopBtn.style.background = '#4EECD9';
+    scrollToTopBtn.style.background = 'rgba(37, 99, 235, 0.1)';
+    scrollToTopBtn.style.transform = 'scale(1.1)';
+    scrollToTopBtn.style.boxShadow = '0 8px 20px rgba(37, 99, 235, 0.25)';
 });
 
 scrollToTopBtn.addEventListener('mouseleave', () => {
-    scrollToTopBtn.style.background = '#00D4AA';
+    scrollToTopBtn.style.background = 'rgba(255, 255, 255, 0.9)';
+    scrollToTopBtn.style.transform = 'scale(1)';
+    scrollToTopBtn.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.15)';
 });
 
 // Preload images function (if you add images later)
