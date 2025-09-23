@@ -260,6 +260,35 @@ input, textarea, select {
     to { transform: rotate(360deg); }
 }
 
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .animate-float,
+    .animate-pulse {
+        animation: none !important;
+    }
+}
+
+/* Mobile animation adjustments */
+@media (max-width: 768px) {
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
+    }
+}
+
 .animate-fade-in {
     animation: fadeIn 0.6s ease-out forwards;
 }
@@ -294,24 +323,96 @@ input, textarea, select {
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 1000px;
+        padding: 0 var(--space-lg);
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        max-width: 900px;
+        padding: 0 var(--space-md);
+    }
+    
+    html {
+        font-size: 15px;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
+        max-width: 100%;
         padding: 0 var(--space-md);
+    }
+    
+    html {
+        font-size: 14px;
     }
     
     :root {
         --space-xs: 0.125rem;
-        --space-sm: 0.25rem;
+        --space-sm: 0.375rem;
         --space-md: 0.75rem;
         --space-lg: 1rem;
         --space-xl: 1.5rem;
         --space-2xl: 2rem;
         --space-3xl: 2.5rem;
     }
+    
+    /* Hide on mobile */
+    .hidden-mobile {
+        display: none !important;
+    }
+    
+    /* Show only on mobile */
+    .mobile-only {
+        display: block !important;
+    }
 }
 
 @media (max-width: 480px) {
     .container {
         padding: 0 var(--space-sm);
+    }
+    
+    html {
+        font-size: 13px;
+    }
+    
+    :root {
+        --space-xs: 0.125rem;
+        --space-sm: 0.25rem;
+        --space-md: 0.5rem;
+        --space-lg: 0.75rem;
+        --space-xl: 1rem;
+        --space-2xl: 1.5rem;
+        --space-3xl: 2rem;
+    }
+}
+
+/* Desktop only utilities */
+@media (min-width: 769px) {
+    .desktop-only {
+        display: block !important;
+    }
+    
+    .hidden-desktop {
+        display: none !important;
+    }
+}
+
+/* Tablet utilities */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .tablet-only {
+        display: block !important;
+    }
+}
+
+/* Large screen utilities */
+@media (min-width: 1201px) {
+    .large-only {
+        display: block !important;
     }
 }
