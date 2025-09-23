@@ -183,14 +183,12 @@
                 </p>
             </div>
 
-            <div class="project-filters fade-in">
-                <button class="filter-btn active" data-filter="all">All Projects</button>
-                <button class="filter-btn" data-filter="mobile">Mobile Apps</button>
-                <button class="filter-btn" data-filter="web">Web Development</button>
-                <button class="filter-btn" data-filter="ai">AI/ML</button>
+            <div class="projects-grid" id="featuredProjects">
+                <!-- Featured projects will be populated by JavaScript -->
             </div>
 
-            <div class="projects-grid">
+            <!-- Hidden container for original projects -->
+            <div style="display: none;" id="originalProjects">
                 <div class="project-card stagger-item hover-lift" data-category="mobile ai">
                     <div class="project-image">
                         <img src="inner glow.png" alt="Inner Glow">
@@ -339,8 +337,34 @@
                     </div>
                 </div>
             </div>
+            <!-- End hidden container -->
+
+            <div class="view-all-container fade-in">
+                <button class="btn btn-primary btn-lg" id="viewAllBtn">
+                    <i class="fas fa-th"></i>
+                    View All Projects
+                </button>
+            </div>
         </div>
     </section>
+
+    <!-- All Projects Modal -->
+    <div class="projects-modal" id="projectsModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>All Projects</h2>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="projects-grid" id="allProjects">
+                    <!-- All project cards will be moved here -->
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Experience Section -->
     <section id="experience" class="experience section">

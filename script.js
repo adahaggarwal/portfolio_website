@@ -8,13 +8,17 @@ class PortfolioApp {
         this.setupEventListeners();
         this.setupScrollAnimations();
         this.setupNavigation();
-        this.setupProjectFilters();
         this.setupContactForm();
         this.setupScrollProgress();
         this.setupBackToTop();
         this.setupSkillBars();
         this.setupTypingEffect();
         this.setupParticles();
+        
+        // Setup projects after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            this.setupProjectFilters();
+        }, 100);
     }
 
     setupEventListeners() {
@@ -80,36 +84,90 @@ class PortfolioApp {
     }
 
     setupProjectFilters() {
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const projectCards = document.querySelectorAll('.project-card');
-
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const filter = button.dataset.filter;
-
-                // Update active button
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                // Filter projects
-                projectCards.forEach(card => {
-                    const categories = card.dataset.category?.split(' ') || [];
-                    
-                    if (filter === 'all' || categories.includes(filter)) {
-                        card.style.display = 'block';
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        }, 100);
-                    } else {
-                        card.style.opacity = '0';
-                        card.style.transform = 'translateY(20px)';
-                        setTimeout(() => {
-                            card.style.display = 'none';
-                        }, 300);
-                    }
-                });
+        // Wait for DOM to be ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                this.setupFeaturedProjects();
+                this.setupProjectsModal();
             });
+        } else {
+            this.setupFeaturedProjects();
+            this.setupProjectsModal();
+        }
+    }
+
+    setupFeaturedProjects() {
+        const featuredGrid = document.getElementById('featuredProjects');
+        const originalContainer = document.getElementById('originalProjects');
+        
+        if (!featuredGrid || !originalContainer) {
+            console.log('Featured grid or original container not found');
+            return;
+        }
+        
+        const allProjectCards = originalContainer.querySelectorAll('.project-card');
+        console.log('Found project cards:', allProjectCards.length);
+        
+        // Clear any existing content
+        featuredGrid.innerHTML = '';
+        
+        // Clone first 3 projects to featured section
+        const featuredProjects = Array.from(allProjectCards).slice(0, 3);
+        featuredProjects.forEach((card, index) => {
+            const clonedCard = card.cloneNode(true);
+            clonedCard.style.display = 'block';
+            clonedCard.style.opacity = '1';
+            clonedCard.style.animationDelay = `${index * 0.1}s`;
+            featuredGrid.appendChild(clonedCard);
+        });
+
+        // Move all projects to modal
+        const allProjectsGrid = document.getElementById('allProjects');
+        if (allProjectsGrid) {
+            allProjectsGrid.innerHTML = '';
+            allProjectCards.forEach(card => {
+                const movedCard = card.cloneNode(true);
+                movedCard.style.display = 'block';
+                movedCard.style.opacity = '1';
+                allProjectsGrid.appendChild(movedCard);
+            });
+        }
+        
+        console.log('Featured projects setup complete');
+    }
+
+    setupProjectsModal() {
+        const viewAllBtn = document.getElementById('viewAllBtn');
+        const modal = document.getElementById('projectsModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        // Open modal
+        viewAllBtn?.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+        });
+
+        // Close modal
+        const closeModal = () => {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 300);
+        };
+
+        modalClose?.addEventListener('click', closeModal);
+        modalOverlay?.addEventListener('click', closeModal);
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
         });
     }
 
