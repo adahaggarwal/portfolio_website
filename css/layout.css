@@ -208,8 +208,9 @@
 
 .hero-actions {
     display: flex;
-    gap: var(--space-lg);
+    gap: var(--space-xl);
     flex-wrap: wrap;
+    margin-bottom: var(--space-xl);
 }
 
 .hero-image {
