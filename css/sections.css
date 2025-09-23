@@ -839,15 +839,29 @@
 
 .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-xl);
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+}
+
+@media (max-width: 1200px) {
+    .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-xl);
+    }
+}
+
+@media (max-width: 768px) {
+    .achievements-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-lg);
+    }
 }
 
 .achievement-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
-    padding: var(--space-xl);
+    padding: var(--space-lg);
     text-align: center;
     transition: var(--transition);
     position: relative;
@@ -876,15 +890,15 @@
 }
 
 .achievement-icon {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     background: var(--gradient-primary);
     border-radius: var(--radius-xl);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto var(--space-lg);
-    font-size: 2rem;
+    margin: 0 auto var(--space-md);
+    font-size: 1.75rem;
     color: white;
     transition: var(--transition);
 }
@@ -894,7 +908,7 @@
 }
 
 .achievement-title {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--space-sm);
@@ -902,5 +916,6 @@
 
 .achievement-description {
     color: var(--text-secondary);
-    line-height: 1.6;
+    line-height: 1.5;
+    font-size: 0.9rem;
 }
